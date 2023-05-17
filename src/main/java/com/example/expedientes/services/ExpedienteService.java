@@ -26,7 +26,7 @@ public class ExpedienteService {
 
     public String saveFile(MultipartFile file){
         try {
-            file.transferTo(new File("D:\\ArchivosServidor\\" + file.getOriginalFilename()));
+            file.transferTo(new File("D:\\Documentos HDD\\Sexto Semestre\\Sistemas Distribuidos\\Proyecto Final\\ArchivosServidor\\" + file.getOriginalFilename()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,7 +34,7 @@ public class ExpedienteService {
     }
 
     public Resource getFile(String name) {
-        Resource recurso = new FileSystemResource("D:\\ArchivosServidor\\" + name);
+        Resource recurso = new FileSystemResource("D:\\Documentos HDD\\Sexto Semestre\\Sistemas Distribuidos\\Proyecto Final\\ArchivosServidor\\" + name);
         return recurso;
     }
 
@@ -83,7 +83,7 @@ public class ExpedienteService {
         }
 
         if (permisoValido.get()) {
-            Resource recurso = new FileSystemResource("D:\\ArchivosServidor\\" + nombreArchivo);
+            Resource recurso = new FileSystemResource("D:\\Documentos HDD\\Sexto Semestre\\Sistemas Distribuidos\\Proyecto Final\\ArchivosServidor\\" + nombreArchivo);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"")
                     .body(recurso);

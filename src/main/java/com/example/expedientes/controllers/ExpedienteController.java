@@ -2,41 +2,30 @@ package com.example.expedientes.controllers;
 
 import com.example.expedientes.dto.RequestDTO;
 import com.example.expedientes.services.ExpedienteService;
-import com.permisosservicegrpc.grpc.PermisoRequest;
-import com.permisosservicegrpc.grpc.PermisoResponse;
-import com.permisosservicegrpc.grpc.permisosServiceGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@RequestMapping("/expedientes")
 public class ExpedienteController {
 
     @Autowired
     private ExpedienteService expedienteService;
 
-    @PostMapping("expedientes/uploadFile")
+    @PostMapping("/uploadFile")
     public ResponseEntity<String> receiveFile(@RequestParam("file") MultipartFile file){
         String message = expedienteService.saveFile(file);
-        System.out.println("eaeaea");
-        return new ResponseEntity<String>(message, HttpStatusCode.valueOf(200));
+        System.out.println("Archivo recibido");
+        return new ResponseEntity<String>(message, HttpStatus.OK);
     }
 
-    @GetMapping("expedientes/downloadFile/{fileName}")
+    @GetMapping("/downloadFile/{fileName}")
     public ResponseEntity<Resource> sendFile(@PathVariable("fileName") String fileName){
         Resource archivo = expedienteService.getFile(fileName);
         HttpHeaders cabeceras = new HttpHeaders();
@@ -57,9 +46,9 @@ public class ExpedienteController {
                 .body(archivo);
     }
 
-    @GetMapping("expedientes/prueba-gateway")
+    @GetMapping("/prueba-gateway")
     public ResponseEntity<String> sendFile() {
-        return new ResponseEntity<String>("Solicitud atendida", HttpStatusCode.valueOf(200));
+        return new ResponseEntity<String>("Solicitud atendida", HttpStatus.OK);
     }
 
     @PostMapping(value = "/expedientes")
@@ -68,6 +57,11 @@ public class ExpedienteController {
         String cedulaMedico = permisoRequest.getCedulaMedico();
         String nombreArchivo = permisoRequest.getNombreArchivo();
         return expedienteService.obtenerArchivo(idPaciente, cedulaMedico, nombreArchivo);
+    }
+
+    @GetMapping ("/prueba")
+    public String prueba(){
+        return "metodo de prueba funciona correctamente";
     }
 
 }
